@@ -60,8 +60,8 @@ namespace NewtonVR.Example
 
                     if (Hand.Inputs[NVRButtons.Trigger].PressDown == true)
                     {
-                        NVRInteractable LHandInteractable = Player.LeftHand.CurrentlyInteracting;
-                        NVRInteractable RHandInteractable = Player.RightHand.CurrentlyInteracting;
+                        NVRPhysicalInteractable LHandInteractable = Player.LeftHand.CurrentlyInteracting;
+                        NVRPhysicalInteractable RHandInteractable = Player.RightHand.CurrentlyInteracting;
 
 
                         Vector3 offset = Player.Head.transform.position - Player.transform.position;

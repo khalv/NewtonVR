@@ -9,7 +9,7 @@ namespace NewtonVR
 {
     public class NVRPlayer : MonoBehaviour
     {
-        public const decimal NewtonVRVersion = 1.31m;
+        public const decimal NewtonVRVersion = 1.24m;
         public const float NewtonVRExpectedDeltaTime = 0.0111f;
 
         public static List<NVRPlayer> Instances = new List<NVRPlayer>();
@@ -135,6 +135,10 @@ namespace NewtonVR
         [HideInInspector]
         public NVRHand[] Hands;
 
+        public LayerMask IgnoreLayers;
+        [Tooltip("Interaction layers listed by priority.")]
+        public LayerMask[] GrabLayers;
+
         [HideInInspector]
         public NVRSDKIntegrations CurrentIntegrationType = NVRSDKIntegrations.None;
 
@@ -233,9 +237,9 @@ namespace NewtonVR
             NVRSDKIntegrations currentIntegration = NVRSDKIntegrations.None;
             string resultLog = "[NewtonVR] Version : " + NewtonVRVersion + ". ";
 
-            if (VRDevice.isPresent == true)
+            if (UnityEngine.XR.XRDevice.isPresent == true)
             {
-                resultLog += "Found VRDevice: " + VRDevice.model + ". ";
+                resultLog += "Found VRDevice: " + UnityEngine.XR.XRDevice.model + ". ";
 
 #if !NVR_Oculus && !NVR_SteamVR
                 string warning = "Neither SteamVR or Oculus SDK is enabled in the NVRPlayer. Please check the \"Enable SteamVR\" or \"Enable Oculus SDK\" checkbox in the NVRPlayer script in the NVRPlayer GameObject.";

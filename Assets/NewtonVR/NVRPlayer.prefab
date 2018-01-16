@@ -5,10 +5,10 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 403292}
-  - 114: {fileID: 11464396}
+  - component: {fileID: 403292}
+  - component: {fileID: 11464396}
   m_Layer: 0
   m_Name: RightHand
   m_TagString: Untagged
@@ -21,10 +21,10 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 449252}
-  - 114: {fileID: 11419036}
+  - component: {fileID: 449252}
+  - component: {fileID: 11419036}
   m_Layer: 0
   m_Name: LeftHand
   m_TagString: Untagged
@@ -37,12 +37,13 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 478642}
-  - 114: {fileID: 11457864}
-  - 114: {fileID: 11439526}
-  - 114: {fileID: 11424654}
+  - component: {fileID: 478642}
+  - component: {fileID: 11457864}
+  - component: {fileID: 11439526}
+  - component: {fileID: 11424654}
+  - component: {fileID: 114401144086043362}
   m_Layer: 0
   m_Name: NVRPlayer
   m_TagString: Untagged
@@ -59,10 +60,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 478642}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &449252
 Transform:
   m_ObjectHideFlags: 1
@@ -72,10 +73,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 478642}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &478642
 Transform:
   m_ObjectHideFlags: 1
@@ -85,13 +86,13 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000011751482340}
   - {fileID: 449252}
   - {fileID: 403292}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &11419036
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -103,16 +104,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1487c36fb75d2924e8bff712895f43c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HoldButton: 2
-  HoldButtonDown: 0
-  HoldButtonUp: 0
-  HoldButtonPressed: 0
-  HoldButtonAxis: 0
-  UseButton: 17
-  UseButtonDown: 0
-  UseButtonUp: 0
-  UseButtonPressed: 0
-  UseButtonAxis: 0
+  HoldButton: 17
+  UseButton: 16
   IsRight: 0
   IsLeft: 0
   Player: {fileID: 0}
@@ -121,7 +114,19 @@ MonoBehaviour:
   CustomModel: {fileID: 0}
   CustomPhysicalColliders: {fileID: 0}
   CurrentHandState: 0
+  HoverTarget: {fileID: 0}
   CurrentlyInteracting: {fileID: 0}
+  OnBeginInteraction:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: NewtonVR.NVRHand+NVRInteractableEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnEndInteraction:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: NewtonVR.NVRHand+NVRInteractableEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  PhysicalController: {fileID: 0}
 --- !u!114 &11424654
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -147,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34741d591a424bf4caa9f51a133edc53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GeometryBlocksLaser: 1
+  GeometryBlocksLaser: 0
   LayersThatBlockLaser:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -171,10 +176,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 692596da9ff9cdd4aa3dd605c1e0df5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SteamVREnabled: 0
+  SteamVREnabled: 1
   OculusSDKEnabled: 0
   InteractionStyle: 0
-  PhysicalHands: 1
+  PhysicalHands: 0
   MakeControllerInvisibleOnInteraction: 0
   AutomaticallySetControllerTransparency: 1
   VibrateOnHover: 1
@@ -182,8 +187,8 @@ MonoBehaviour:
   OnInitialized:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   EnableEditorPlayerPreview: 1
   EditorPlayerPreview: {fileID: 4300000, guid: 4c5ee852bb16638409bc37f8004f52a2, type: 3}
   EditorPlayspacePreview: {fileID: 4300000, guid: 53999722e4cf33d40b85a5c7a0c317fd,
@@ -217,6 +222,10 @@ MonoBehaviour:
   LeftHand: {fileID: 11419036}
   RightHand: {fileID: 11464396}
   Hands: []
+  IgnoreLayers:
+    serializedVersion: 2
+    m_Bits: 4608
+  GrabLayers: []
   CurrentIntegrationType: 0
   DEBUGEnableFallback2D: 0
   DEBUGDropFrames: 0
@@ -234,16 +243,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1487c36fb75d2924e8bff712895f43c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HoldButton: 2
-  HoldButtonDown: 0
-  HoldButtonUp: 0
-  HoldButtonPressed: 0
-  HoldButtonAxis: 0
-  UseButton: 17
-  UseButtonDown: 0
-  UseButtonUp: 0
-  UseButtonPressed: 0
-  UseButtonAxis: 0
+  HoldButton: 17
+  UseButton: 16
   IsRight: 0
   IsLeft: 0
   Player: {fileID: 0}
@@ -252,7 +253,19 @@ MonoBehaviour:
   CustomModel: {fileID: 0}
   CustomPhysicalColliders: {fileID: 0}
   CurrentHandState: 0
+  HoverTarget: {fileID: 0}
   CurrentlyInteracting: {fileID: 0}
+  OnBeginInteraction:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: NewtonVR.NVRHand+NVRInteractableEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnEndInteraction:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: NewtonVR.NVRHand+NVRInteractableEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  PhysicalController: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -273,14 +286,15 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011751482340}
-  - 114: {fileID: 114000011294332214}
-  - 20: {fileID: 20000010622200848}
-  - 92: {fileID: 92000013402849364}
-  - 124: {fileID: 124000013977819758}
-  - 81: {fileID: 81000014173449286}
+  - component: {fileID: 4000011751482340}
+  - component: {fileID: 114000011294332214}
+  - component: {fileID: 20000010622200848}
+  - component: {fileID: 92000013402849364}
+  - component: {fileID: 124000013977819758}
+  - component: {fileID: 81000014173449286}
+  - component: {fileID: 114820248586101086}
   m_Layer: 0
   m_Name: Head
   m_TagString: MainCamera
@@ -288,6 +302,41 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1446680230362926
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4684255021167726}
+  - component: {fileID: 135688056270758272}
+  - component: {fileID: 114016862371397828}
+  - component: {fileID: 82733312813701726}
+  - component: {fileID: 54117785340883476}
+  m_Layer: 9
+  m_Name: Flashlight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1566337034734708
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4732591786134668}
+  - component: {fileID: 108116366653102510}
+  m_Layer: 9
+  m_Name: Lamp
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
 --- !u!4 &4000011751482340
 Transform:
   m_ObjectHideFlags: 1
@@ -297,10 +346,38 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
+  m_Children:
+  - {fileID: 4684255021167726}
   m_Father: {fileID: 478642}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4684255021167726
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1446680230362926}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4732591786134668}
+  m_Father: {fileID: 4000011751482340}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4732591786134668
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1566337034734708}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4684255021167726}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!20 &20000010622200848
 Camera:
   m_ObjectHideFlags: 1
@@ -326,15 +403,32 @@ Camera:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingPath: -1
+  m_RenderingPath: 1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 1
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
-  m_StereoMirrorMode: 0
+--- !u!54 &54117785340883476
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1446680230362926}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!81 &81000014173449286
 AudioListener:
   m_ObjectHideFlags: 1
@@ -342,6 +436,87 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010304442640}
   m_Enabled: 1
+--- !u!82 &82733312813701726
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1446680230362926}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 243244204787587752, guid: e59b9b790d31bcd4ba4005c2d66e70b1,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: f2f87e6444a47a3489339389f97a9cbe, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!92 &92000013402849364
 Behaviour:
   m_ObjectHideFlags: 1
@@ -349,6 +524,42 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010304442640}
   m_Enabled: 1
+--- !u!108 &108116366653102510
+Light:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1566337034734708}
+  m_Enabled: 1
+  serializedVersion: 8
+  m_Type: 0
+  m_Color: {r: 0.97744524, g: 0.97794116, b: 0.94198745, a: 1}
+  m_Intensity: 2
+  m_Range: 3
+  m_SpotAngle: 45
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+  m_Cookie: {fileID: 2800000, guid: 487e0d1ed19e06343b31d0512f3b92e4, type: 3}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 4
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!114 &114000011294332214
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -360,6 +571,96 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dd93dbead6c28e42b0408c298a10966, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114016862371397828
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1446680230362926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34809de13779bc143b1827abb00daa2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  light: {fileID: 108116366653102510}
+--- !u!114 &114401144086043362
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 140386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73e76134598935641aa24b05fe79e6d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114820248586101086
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010304442640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeTrigger: {fileID: 4000011751482340}
+  volumeLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  stopNaNPropagation: 1
+  antialiasingMode: 1
+  temporalAntialiasing:
+    jitterSpread: 0.75
+    sharpen: 0.25
+    stationaryBlending: 0.95
+    motionBlending: 0.85
+  fastApproximateAntialiasing:
+    mobileOptimized: 0
+    keepAlpha: 0
+  ambientOcclusion:
+    enabled: 0
+    mode: 1
+    ambientOnly: 0
+    scalableAO:
+      intensity: 0.5
+      radius: 0.25
+      quality: 2
+      color: {r: 0, g: 0, b: 0, a: 1}
+    multiScaleVO:
+      noiseFilterTolerance: 0
+      blurTolerance: -4.6
+      upsampleTolerance: -12
+      thicknessModifier: 1
+      intensity: 1
+      color: {r: 0, g: 0, b: 0, a: 1}
+  fog:
+    enabled: 1
+    excludeSkybox: 1
+  monitors:
+    lightMeter:
+      width: 512
+      height: 256
+      showCurves: 1
+    histogram:
+      width: 512
+      height: 256
+      channel: 3
+    waveform:
+      exposure: 0.12
+      height: 256
+    vectorscope:
+      size: 256
+      exposure: 0.12
+  m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
+  m_ShowRenderingFeatures: 1
+  m_ShowToolkit: 1
+  m_ShowCustomSorter: 1
+  breakBeforeColorGrading: 0
+  m_BeforeTransparentBundles: []
+  m_BeforeStackBundles: []
+  m_AfterStackBundles: []
 --- !u!124 &124000013977819758
 Behaviour:
   m_ObjectHideFlags: 1
@@ -367,3 +668,15 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010304442640}
   m_Enabled: 1
+--- !u!135 &135688056270758272
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1446680230362926}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.2
+  m_Center: {x: 0, y: 0, z: 0}

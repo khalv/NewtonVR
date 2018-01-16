@@ -6,24 +6,22 @@ using System.Linq;
 
 namespace NewtonVR
 {
-    public class NVRInteractableItem : NVRInteractable
+    public class NVRInteractableItem : NVRPhysicalInteractable
     {
-        protected const float MaxVelocityChange = 10f;
-        protected const float MaxAngularVelocityChange = 20f;
-        protected const float VelocityMagic = 6000f;
-        protected const float AngularVelocityMagic = 50f;
+        private const float MaxVelocityChange = 10f;
+        private const float MaxAngularVelocityChange = 20f;
+        private const float VelocityMagic = 6000f;
+        private const float AngularVelocityMagic = 50f;
 
         [Tooltip("If you have a specific point you'd like the object held at, create a transform there and set it to this variable")]
         public Transform InteractionPoint;
 
         public UnityEvent OnUseButtonDown;
         public UnityEvent OnUseButtonUp;
-
-        public UnityEvent OnHovering;
-
-        public UnityEvent OnBeginInteraction;
-        public UnityEvent OnEndInteraction;
-
+/*        
+ *        public NVRInteractionEvent OnUseButtonDown;
+        public NVRInteractionEvent OnUseButtonUp;
+        */
         protected Dictionary<NVRHand, Transform> PickupTransforms = new Dictionary<NVRHand, Transform>();
 
         protected Vector3 ExternalVelocity;
@@ -265,7 +263,7 @@ namespace NewtonVR
 
             if (OnBeginInteraction != null)
             {
-                OnBeginInteraction.Invoke();
+                OnBeginInteraction.Invoke(hand);
             }
         }
 
@@ -305,21 +303,21 @@ namespace NewtonVR
 
                 if (OnEndInteraction != null)
                 {
-                    OnEndInteraction.Invoke();
+                    OnEndInteraction.Invoke(hand);
                 }
             }
         }
-
+/*
         public override void HoveringUpdate(NVRHand hand, float forTime)
         {
             base.HoveringUpdate(hand, forTime);
 
             if (OnHovering != null)
             {
-                OnHovering.Invoke();
+                OnHovering.Invoke(hand);
             }
         }
-
+        */
         public override void ResetInteractable()
         {
             EndInteraction(null);

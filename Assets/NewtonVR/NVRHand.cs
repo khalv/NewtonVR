@@ -46,9 +46,10 @@ namespace NewtonVR
         [HideInInspector]
         public HandState CurrentHandState = HandState.Uninitialized;
 
-        private Dictionary<NVRInteractable, Dictionary<Collider, float>> CurrentlyHoveringOver;
+        private Dictionary<NVRInteractable, Dictionary<Collider, float>> HoverCandidates;
+        public NVRInteractable HoverTarget = null;
 
-        public NVRInteractable CurrentlyInteracting;
+        public NVRPhysicalInteractable CurrentlyInteracting;
 
         [Serializable]
         public class NVRInteractableEvent : UnityEvent<NVRInteractable> { }
@@ -69,6 +70,8 @@ namespace NewtonVR
         private Renderer[] GhostRenderers;
 
         private NVRInputDevice InputDevice;
+        private LayerMask IgnoreLayers;
+        private LayerMask[] GrabLayers;
 
         private GameObject RenderModel;
 
@@ -76,7 +79,7 @@ namespace NewtonVR
         {
             get
             {
-                return CurrentlyHoveringOver.Any(kvp => kvp.Value.Count > 0);
+                return HoverCandidates.Any(kvp => kvp.Value.Count > 0);
             }
         }
         public bool IsInteracting
@@ -143,8 +146,10 @@ namespace NewtonVR
             IsLeft = Player.LeftHand == this;
 
             CurrentInteractionStyle = Player.InteractionStyle;
+            IgnoreLayers = Player.IgnoreLayers;
+            GrabLayers = Player.GrabLayers;
 
-            CurrentlyHoveringOver = new Dictionary<NVRInteractable, Dictionary<Collider, float>>();
+            HoverCandidates = new Dictionary<NVRInteractable, Dictionary<Collider, float>>();
 
             LastPositions = new Vector3[EstimationSamples];
             LastRotations = new Quaternion[EstimationSamples];
@@ -263,18 +268,57 @@ namespace NewtonVR
 
         protected void UpdateHovering()
         {
+            var closest = HoverCandidates.GetEnumerator().Current;
+            float closestDistance = float.MaxValue;
+
             if (CurrentHandState == HandState.Idle)
             {
-                var hoveringEnumerator = CurrentlyHoveringOver.GetEnumerator();
+                var hoveringEnumerator = HoverCandidates.GetEnumerator();
                 while (hoveringEnumerator.MoveNext())
                 {
                     var hoveringOver = hoveringEnumerator.Current;
-                    if (hoveringOver.Value.Count > 0)
+
+                    if (hoveringOver.Key == null)
+                        continue;
+
+                    float distance = Vector3.Distance(this.transform.position, hoveringOver.Key.transform.position);
+                    if (distance < closestDistance)
                     {
-                        hoveringOver.Key.HoveringUpdate(this, Time.time - hoveringOver.Value.OrderBy(colliderTime => colliderTime.Value).First().Value);
+                        closestDistance = distance;
+                        closest = hoveringOver;
                     }
+
+                }
+                if (closest.Key != null)
+                {
+                    if (HoverTarget != closest.Key)
+                    {
+                        if (HoverTarget != null)
+                        {
+                            HoverTarget.HoverEnd(this);
+                        }
+
+                        HoverTarget = closest.Key;
+                        HoverTarget.HoverStart(this);
+                    }
+                    closest.Key.HoveringUpdate(this, Time.time - closest.Value.OrderBy(colliderTime => colliderTime.Value).First().Value);
                 }
             }
+
+                /*
+                if (CurrentHandState == HandState.Idle)
+                {
+                    var hoveringEnumerator = CurrentlyHoveringOver.GetEnumerator();
+                    while (hoveringEnumerator.MoveNext())
+                    {
+                        var hoveringOver = hoveringEnumerator.Current;
+                        if (hoveringOver.Value.Count > 0)
+                        {
+                            hoveringOver.Key.HoveringUpdate(this, Time.time - hoveringOver.Value.OrderBy(colliderTime => colliderTime.Value).First().Value);
+                        }
+                    }
+                }
+                */
 
             if (InputDevice != null && IsInteracting == false && IsHovering == true)
             {
@@ -542,7 +586,7 @@ namespace NewtonVR
                 EstimationSampleIndex = 0;
         }
 
-        public virtual void BeginInteraction(NVRInteractable interactable)
+        public virtual void BeginInteraction(NVRPhysicalInteractable interactable)
         {
             if (interactable.CanAttach == true)
             {
@@ -564,10 +608,10 @@ namespace NewtonVR
             }
         }
 
-        public virtual void EndInteraction(NVRInteractable item)
+        public virtual void EndInteraction(NVRPhysicalInteractable item)
         {
-            if (item != null && CurrentlyHoveringOver.ContainsKey(item) == true)
-                CurrentlyHoveringOver.Remove(item);
+            //if (item != null && HoverCandidates.ContainsKey(item) == true)
+            //    HoverCandidates.Remove(item);
 
             if (CurrentlyInteracting != null)
             {
@@ -592,28 +636,36 @@ namespace NewtonVR
 
         private bool PickupClosest()
         {
+            if (HoverTarget is NVRPhysicalInteractable)
+            {
+                BeginInteraction((NVRPhysicalInteractable)HoverTarget);
+                return true;
+            }
+            return false;
+        }
+
+        /*
+        private bool PickupClosest()
+        {
             NVRInteractable closest = null;
             float closestDistance = float.MaxValue;
 
-            foreach (var collider in GhostColliders)
+            foreach (var hovering in HoverCandidates)
             {
-                foreach (var hovering in CurrentlyHoveringOver)
-                {
-                    if (hovering.Key == null)
-                        continue;
+                if (hovering.Key == null || !(hovering.Key is NVRPhysicalInteractable))
+                    continue;
 
-                    float distance = Vector3.Distance(collider.transform.position, hovering.Key.transform.position);
-                    if (distance < closestDistance)
-                    {
-                        closestDistance = distance;
-                        closest = hovering.Key;
-                    }
+                float distance = Vector3.Distance(this.transform.position, hovering.Key.transform.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closest = hovering.Key;
                 }
             }
 
             if (closest != null)
             {
-                BeginInteraction(closest);
+                BeginInteraction((NVRPhysicalInteractable)closest);
                 return true;
             }
             else
@@ -621,47 +673,69 @@ namespace NewtonVR
                 return false;
             }
         }
+        */
 
         protected virtual void OnTriggerEnter(Collider collider)
         {
+            if (((1 << collider.gameObject.layer) & IgnoreLayers) != 0)
+                return;
+
             NVRInteractable interactable = NVRInteractables.GetInteractable(collider);
             if (interactable == null || interactable.enabled == false)
                 return;
 
-            if (CurrentlyHoveringOver.ContainsKey(interactable) == false)
-                CurrentlyHoveringOver[interactable] = new Dictionary<Collider, float>();
+            if (HoverCandidates.ContainsKey(interactable) == false)
+            {
+                HoverCandidates[interactable] = new Dictionary<Collider, float>();
+            }
 
-            if (CurrentlyHoveringOver[interactable].ContainsKey(collider) == false)
-                CurrentlyHoveringOver[interactable][collider] = Time.time;
+
+            if (HoverCandidates[interactable].ContainsKey(collider) == false)
+                HoverCandidates[interactable][collider] = Time.time;
+
         }
 
         protected virtual void OnTriggerStay(Collider collider)
         {
+            if (((1 << collider.gameObject.layer) & IgnoreLayers) != 0)
+                return;
+
             NVRInteractable interactable = NVRInteractables.GetInteractable(collider);
             if (interactable == null || interactable.enabled == false)
                 return;
 
-            if (CurrentlyHoveringOver.ContainsKey(interactable) == false)
-                CurrentlyHoveringOver[interactable] = new Dictionary<Collider, float>();
+            if (HoverCandidates.ContainsKey(interactable) == false)
+                HoverCandidates[interactable] = new Dictionary<Collider, float>();
 
-            if (CurrentlyHoveringOver[interactable].ContainsKey(collider) == false)
-                CurrentlyHoveringOver[interactable][collider] = Time.time;
+            if (HoverCandidates[interactable].ContainsKey(collider) == false)
+                HoverCandidates[interactable][collider] = Time.time;
         }
 
         protected virtual void OnTriggerExit(Collider collider)
         {
+            if (((1 << collider.gameObject.layer) & IgnoreLayers) != 0)
+                return;
+
             NVRInteractable interactable = NVRInteractables.GetInteractable(collider);
             if (interactable == null)
                 return;
 
-            if (CurrentlyHoveringOver.ContainsKey(interactable) == true)
+            if (HoverCandidates.ContainsKey(interactable) == true)
             {
-                if (CurrentlyHoveringOver[interactable].ContainsKey(collider) == true)
+                if (HoverCandidates[interactable].ContainsKey(collider) == true)
                 {
-                    CurrentlyHoveringOver[interactable].Remove(collider);
-                    if (CurrentlyHoveringOver[interactable].Count == 0)
+                    HoverCandidates[interactable].Remove(collider);
+                    if (HoverCandidates[interactable].Count == 0)
                     {
-                        CurrentlyHoveringOver.Remove(interactable);
+                        HoverCandidates.Remove(interactable);
+
+                        //Hover stop event
+
+                        if (interactable == HoverTarget)
+                        {
+                            interactable.HoverEnd(this);
+                            HoverTarget = null;
+                        }
                     }
                 }
             }
@@ -685,8 +759,8 @@ namespace NewtonVR
             if (CurrentlyInteracting == interactable)
                 CurrentlyInteracting = null;
 
-            if (CurrentlyHoveringOver != null && CurrentlyHoveringOver.ContainsKey(interactable))
-                CurrentlyHoveringOver.Remove(interactable);
+            if (HoverCandidates != null && HoverCandidates.ContainsKey(interactable))
+                HoverCandidates.Remove(interactable);
         }
 
         private void SetVisibility(VisibilityLevel visibility)

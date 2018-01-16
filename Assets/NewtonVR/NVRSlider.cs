@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace NewtonVR
 {
-    public class NVRSlider : NVRInteractable
+    public class NVRSlider : NVRPhysicalInteractable
     {
         [Tooltip("Set to zero when the slider is at StartPoint. Set to one when the slider is at EndPoint.")]
         public float CurrentValue = 0f;

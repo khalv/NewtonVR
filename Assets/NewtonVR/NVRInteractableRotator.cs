@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace NewtonVR
 {
-    public class NVRInteractableRotator : NVRInteractable
+    public class NVRInteractableRotator : NVRPhysicalInteractable
     {
         public float CurrentAngle;
 
